@@ -1,111 +1,84 @@
-# Project #2. Private Blockchain
+# Private Blockchain
 
-This is Project 2, Private Blockchain, in this project I created the classes to manage my private blockchain, to be able to persist my blochchain I used LevelDB.
+This project was created for the Blockchain Developer Nanodegree at Udacity. It's a rather simple implementation of a private Blockchain with a RESTful API.
 
-## Setup project for Review.
+## Getting Started
 
-To setup the project for review do the following:
-1. Download the project.
-2. Run command __npm install__ to install the project dependencies.
-3. Run command __node simpleChain.js__ in the root directory.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Testing the project
+### Prerequisites
 
-The file __simpleChain.js__ in the root directory has all the code to be able to test the project, please review the comments in the file and uncomment the code to be able to test each feature implemented:
+Download and install [Node.js](https://nodejs.org)
 
-* Uncomment the function:
-```
-(function theLoop (i) {
-	setTimeout(function () {
-		let blockTest = new Block.Block("Test Block - " + (i + 1));
-		myBlockChain.addNewBlock(blockTest).then((result) => {
-			console.log(result);
-			i++;
-			if (i < 10) theLoop(i);
-		});
-	}, 10000);
-  })(0);
-```
-This function will create 10 test blocks in the chain.
-* Uncomment the function
-```
-myBlockChain.getBlockChain().then((data) => {
-	console.log( data );
-})
-.catch((error) => {
-	console.log(error);
-})
-```
-This function print in the console the list of blocks in the blockchain
-* Uncomment the function
-```
-myBlockChain.getBlock(0).then((block) => {
-	console.log(JSON.stringify(block));
-}).catch((err) => { console.log(err);});
+### Installing
+
+* Download or clone the project
+* Open Terminal
+* Change the current working directory to the location the project files were saved
+* Install project dependencies with the command ```npm install```
+
+## Testing
+
+Test functionality with the automated test or by using the API.
+
+### API Endpoints
+
+The project’s API service is configured to run on port 8000. The default URL is using localhost for connectivity ( http://localhost:8000 ).
+
+* Start the server with the command ```node server.js```
+
+#### GET Block Endpoint
+
+**URL:** http://localhost:8000/block/{height}
+
+**height:** Height of the block you want.
+
+* Example
+
+http://localhost:8000/block/0
 
 ```
-This function get from the Blockchain the block requested.
-* Uncomment the function
-```
-myBlockChain.validateBlock(0).then((valid) => {
-	console.log(valid);
-})
-.catch((error) => {
-	console.log(error);
-})
-```
-This function validate and show in the console if the block is valid or not, if you want to modify a block to test this function uncomment this code:
-```
-myBlockChain.getBlock(5).then((block) => {
-	let blockAux = block;
-	blockAux.body = "Tampered Block";
-	myBlockChain._modifyBlock(blockAux.height, blockAux).then((blockModified) => {
-		if(blockModified){
-			myBlockChain.validateBlock(blockAux.height).then((valid) => {
-				console.log(`Block #${blockAux.height}, is valid? = ${valid}`);
-			})
-			.catch((error) => {
-				console.log(error);
-			})
-		} else {
-			console.log("The Block wasn't modified");
-		}
-	}).catch((err) => { console.log(err);});
-}).catch((err) => { console.log(err);});
-
-myBlockChain.getBlock(6).then((block) => {
-	let blockAux = block;
-	blockAux.previousBlockHash = "jndininuud94j9i3j49dij9ijij39idj9oi";
-	myBlockChain._modifyBlock(blockAux.height, blockAux).then((blockModified) => {
-		if(blockModified){
-			console.log("The Block was modified");
-		} else {
-			console.log("The Block wasn't modified");
-		}
-	}).catch((err) => { console.log(err);});
-}).catch((err) => { console.log(err);});
-```
-* Uncomment this function:
-```
-myBlockChain.validateChain().then((errorLog) => {
-	if(errorLog.length > 0){
-		console.log("The chain is not valid:");
-		errorLog.forEach(error => {
-			console.log(error);
-		});
-	} else {
-		console.log("No errors found, The chain is Valid!");
-	}
-})
-.catch((error) => {
-	console.log(error);
-})
+{
+    "hash": "20723bda4f85fc6b90dabff6248cb8d6cf0f01c7c0d2dac47f210d3df0d42bd9",
+    "height": 0,
+    "body": "Genesis Block",
+    "time": "1558199092",
+    "previousBlockHash": ""
+}
 ```
 
-This function validates the whole chain and return a list of errors found during the validation.
+#### POST Block Endpoint
 
-## What do I learned with this Project
+**URL:** http://localhost:8000/block
 
-* I was able to identify the basic data model for a Blockchain application.
-* I was able to use LevelDB to persist the Blockchain data.
-* I was able to write algorithms for basic operations in the Blockchain.
+**payload:** ```{ "body": "This is a string" }```
+
+* Example
+
+**payload:** ```{ "body": "My first API Block" }```
+
+```
+{
+    "hash": "2fab42fc080cce92324c7e1675c11bbf31f5479334cf079a65a0f66fba65df41",
+    "height": 1,
+    "body": "My first API Block",
+    "time": "1558199155",
+    "previousBlockHash": "20723bda4f85fc6b90dabff6248cb8d6cf0f01c7c0d2dac47f210d3df0d42bd9"
+}
+```
+
+### Tests
+
+The file **simpleChain.js** has all the code to be able to test the project's functionality. By running the automated test a simple Blockchain is created and then tampered and tested.
+
+* Run the test with the command ```node simpleChain.js```
+
+## Built With
+
+* [Node.js](https://nodejs.org)
+* [Hapi](https://hapijs.com) - Server Framework
+* [level](https://www.npmjs.com/package/level) - LevelDB wrapper for Node.js
+
+## Authors
+
+* **Gravvanis Dimitris**
